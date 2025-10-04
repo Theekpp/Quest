@@ -5,9 +5,8 @@ A scalable geo-location based quest platform implemented as a Telegram Mini App.
 
 ## Current Status
 - **Production Ready**: Yes
-- **Last Updated**: October 4, 2025 (GitHub import completed)
+- **Last Updated**: October 4, 2025
 - **Environment**: Replit Development
-- **Setup Status**: ✅ Fully configured and running
 
 ## Project Architecture
 
@@ -102,88 +101,20 @@ The development server runs on port 5000 with:
 
 ## Database Schema
 
-### Current Tables (Implemented)
-All tables use PostgreSQL with Drizzle ORM for type-safe queries.
-
+### Current Tables
 - **users** - User authentication and profile data
   - id (varchar, UUID primary key)
-  - telegramId (text, unique, not null)
-  - username (text, not null)
-  - fullName (text)
-  - birthdate (date)
-  - role (text: "traveler" | "guide" | "treasure_hunter")
-  - totalPoints (integer, default 0)
-  - currentLevel (integer, default 1)
-  - createdAt (timestamp)
-  - lastActiveAt (timestamp)
+  - username (text, unique)
+  - password (text)
 
-- **motifs** - Quest themes and storylines
-  - id (varchar, UUID primary key)
-  - name (text, unique, not null)
-  - description (text, not null)
-  - legend (text) - Full story/legend text
-  - totalPois (integer, not null)
-  - estimatedDuration (integer) - Minutes
-  - difficulty (text: "easy" | "medium" | "hard")
-  - themeColor (text)
-  - iconUrl (text)
-  - isActive (boolean, default true)
-  - createdAt (timestamp)
-
-- **points_of_interest** - POI locations for each motif
-  - id (varchar, UUID primary key)
-  - motifId (varchar, FK to motifs)
-  - name (text, not null)
-  - description (text, not null)
-  - story (text) - Historical/cultural story
-  - address (text, not null)
-  - latitude (numeric, not null)
-  - longitude (numeric, not null)
-  - orderInRoute (integer, not null)
-  - qrCode (text, unique)
-  - imageUrl (text)
-  - pointValue (integer, default 10)
-  - createdAt (timestamp)
-
+### Planned Schema (from design docs)
+- **motifs** - Quest themes
+- **locations** - Geographic areas for quests
+- **points_of_interest** - Specific POI locations
 - **achievements** - Achievement definitions
-  - id (varchar, UUID primary key)
-  - name (text, unique, not null)
-  - description (text, not null)
-  - iconUrl (text)
-  - pointValue (integer, default 0)
-  - badgeType (text: "bronze" | "silver" | "gold" | "platinum")
-  - condition (text, not null) - JSON string with unlock conditions
-  - createdAt (timestamp)
-
-- **user_motif_progress** - User progress tracking per motif
-  - id (varchar, UUID primary key)
-  - userId (varchar, FK to users)
-  - motifId (varchar, FK to motifs)
-  - status (text: "not_started" | "in_progress" | "completed")
-  - visitedPoisCount (integer, default 0)
-  - totalPoints (integer, default 0)
-  - startedAt (timestamp)
-  - completedAt (timestamp)
-  - lastVisitAt (timestamp)
-  - Unique constraint on (userId, motifId)
-
-- **user_poi_visits** - Individual POI visit records
-  - id (varchar, UUID primary key)
-  - userId (varchar, FK to users)
-  - poiId (varchar, FK to points_of_interest)
-  - visitedAt (timestamp, not null)
-  - pointsEarned (integer, default 0)
-  - verificationMethod (text: "qr_code" | "geolocation")
-  - latitude (numeric) - User's location at visit
-  - longitude (numeric)
-  - Unique constraint on (userId, poiId)
-
-- **user_achievements** - Earned achievements tracking
-  - id (varchar, UUID primary key)
-  - userId (varchar, FK to users)
-  - achievementId (varchar, FK to achievements)
-  - earnedAt (timestamp, not null)
-  - Unique constraint on (userId, achievementId)
+- **user_profiles** - Extended user data
+- **user_movement_log** - Geolocation tracking
+- **user_action_log** - User interaction history
 
 ## Configuration Files
 
@@ -244,49 +175,29 @@ Use Replit's publish button to deploy. The app is configured for autoscale deplo
 
 ### Planned Enhancements
 1. Complete authentication system with Telegram integration
-2. Connect frontend Map page to real POI data from API
-3. Implement geolocation tracking (60-second intervals)
-4. Add POI activation via QR code scanning
-5. Connect frontend Achievements and Rating pages to API
-6. Create admin interface for managing motifs and content
-7. Add multiple motif support with theme switching
+2. Implement geolocation tracking (60-second intervals)
+3. Add POI activation via QR code scanning
+4. Build achievement and rewards system
+5. Create admin interface for managing motifs and content
+6. Add multiple motif support with theme switching
+7. Implement leaderboard functionality
 8. Add offline mode support
 
 ## User Preferences
 - None specified yet
 
 ## Recent Changes
-- **October 4, 2025**: Telegram integration completed - ready for production
-  - ✅ Created `useTelegramUser` hook to fetch user data from Telegram WebApp API
-  - ✅ Created `useCurrentUser` hook for automatic user creation/retrieval from database
-  - ✅ Replaced mock user data with real Telegram user data
-  - ✅ Added TypeScript definitions for Telegram WebApp API
-  - ✅ Automatic user profile creation on first login via Telegram bot
-  - ✅ Each Telegram user gets individual data (name, avatar, points, level)
-  - ✅ Production build tested and working (9.29s build time)
-  - ✅ Created comprehensive Telegram Bot setup guide (TELEGRAM_BOT_SETUP.md)
-  - 📱 **To launch:** Configure bot via @BotFather and connect your Replit URL
-  - 🎯 **User experience:** Each user sees their personal profile, progress, and achievements
-
-- **October 4, 2025**: Fresh GitHub import successfully configured in Replit
-  - ✅ Node.js 20 verified installed (v20.19.3)
-  - ✅ All dependencies installed and available (tsx, drizzle, etc.)
-  - ✅ PostgreSQL database created and provisioned with environment variables
+- **October 4, 2025**: GitHub import completed and Replit environment setup finalized
+  - ✅ Node.js 20 installed and verified (v20.19.3)
+  - ✅ PostgreSQL database provisioned with environment variables (DATABASE_URL, etc.)
   - ✅ Database schema pushed successfully using `npm run db:push`
-  - ✅ Seed data loaded: 1 motif, 5 POIs, 5 achievements
-  - ✅ Development Server workflow configured on port 5000 with webview output
-  - ✅ Server configured to bind to 0.0.0.0:5000 for proper Replit proxy access
-  - ✅ Vite dev server already configured with `allowedHosts: true` for proxy support
+  - ✅ Development workflow configured on port 5000 with webview output
+  - ✅ Vite dev server configured with `allowedHosts: true` for Replit proxy support
+  - ✅ Server configured to bind to 0.0.0.0:5000 for proper access
   - ✅ Autoscale deployment configured (build: `npm run build`, run: `npm start`)
-  - ✅ Application verified running with all pages functional:
-    - Map page with 2GIS integration (loading properly)
-    - Locations page with search functionality
-    - API test page showing backend connectivity
-    - Achievements, Rating, and Profile pages
-  - ✅ Telegram WebApp integration working correctly
+  - ✅ Application verified running with Telegram WebApp integration
   - ✅ .gitignore properly configured for Node.js/TypeScript project
-  - 🔍 Known limitation: 2GIS map shows WebGL/tile key errors in Replit preview (expected - works fine in real Telegram app with proper API key)
-  - 🔍 LocationManager warnings expected in Replit environment (works in real Telegram)
+  - Known limitations in Replit preview: 2GIS map shows WebGL error (works fine in real Telegram app)
 
 ## Development Notes
 
